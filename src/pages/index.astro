@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const allPosts = await Astro.glob('./blog/*.md');
+const posts = allPosts.sort((a,b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
+---
+<BaseLayout title="SoftCloud Media" description="Soft and easy media reviews">
+  <section class="sakura-hero"><h1>SoftCloud Media</h1><p>Soft and easy media reviews</p></section>
+  <section class="sakura-grid">
+    {posts.slice(0,12).map(post => (
+      <article class="sakura-card">
+        {post.frontmatter.image && <img src={post.frontmatter.image} alt={post.frontmatter.title} loading="lazy" />}
+        <div class="sakura-body">
+          <time>{new Date(post.frontmatter.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</time>
+          <h3><a href={post.url}>{post.frontmatter.title}</a></h3>
+          <p>{post.frontmatter.description?.slice(0,100)}</p>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
